@@ -1,36 +1,49 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function Login() {
+export default function Signup() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [confirm, setConfirm] = useState("");
 
-  const [touched, setTouched] = useState({ email: false, password: false });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  const [touched, setTouched] = useState({
+    name: false,
+    email: false,
+    password: false,
+    confirm: false,
+  });
 
   const errors = useMemo(() => {
     const e: Record<string, string> = {};
+    if (touched.name && name.trim().length < 2) {
+        e.name = "Name must be at least 2 characters.";
+      }
     if (email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      e.email = "Enter a valid email.";
+        e.email = "Enter a valid email.";
     }
-    if (touched.password && !password) {
-      e.password = "Password is required.";
+    if (touched.password && password.length < 8) {
+        e.password = "Password must be at least 8 characters.";
+    }    
+    if ((touched.confirm || confirm.length > 0) && confirm !== password) {
+        e.confirm = "Passwords do not match.";
     }
-      return e;
-  }, [email, password]);
+    return e;
+  }, [name, email, password, confirm]);
 
+  const showNameError = touched.name && !!errors.name;
   const showEmailError = touched.email && !!errors.email;
   const showPasswordError = touched.password && !!errors.password;
-
-  const canSubmit = useMemo(() => {
-    return (
-      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()) &&
-      password.length > 0 &&
-      !errors.email &&
-      !errors.password
-    );
-  }, [email, password, errors.email, errors.password]);
-
+  const showConfirmError = touched.confirm && !!errors.confirm;
+  const canSubmit =
+    name.trim().length >= 2 &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()) &&
+    password.length >= 8 &&
+    confirm.length > 0 &&
+    confirm === password;
   return (
     <div style={styles.page}>
       <div style={styles.card}>
@@ -38,14 +51,27 @@ export default function Login() {
           <div style={styles.logo} />
           <div>
             <div style={styles.brandTitle}>Interview Simulation</div>
-            <div style={styles.brandSub}>Welcome back</div>
+            <div style={styles.brandSub}>Create your account</div>
           </div>
         </div>
 
-        <h1 style={styles.h1}>Log in</h1>
-        <p style={styles.p}>Continue your practice sessions.</p>
+        <h1 style={styles.h1}>Sign up</h1>
+        <p style={styles.p}>Practice interviews, track progress, and improve fast.</p>
 
         <form style={styles.form} onSubmit={(e) => e.preventDefault()}>
+          <div style={styles.field}>
+            <label style={styles.label}>Full name</label>
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              onBlur={() => setTouched((t) => ({ ...t, name: true }))}
+              style={styles.input}
+              placeholder="Divya Panthi"
+              autoComplete="name"
+            />
+            {errors.name && <div style={styles.error}>{errors.name}</div>}
+          </div>
+
           <div style={styles.field}>
             <label style={styles.label}>Email</label>
             <input
@@ -67,9 +93,10 @@ export default function Login() {
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                onBlur={() => setTouched((t) => ({ ...t, password: true }))}
                 style={styles.inputInner}
-                placeholder="Your password"
-                autoComplete="current-password"
+                placeholder="Min 8 characters"
+                autoComplete="new-password"
               />
               <button
                 type="button"
@@ -79,19 +106,34 @@ export default function Login() {
                 {showPassword ? "Hide" : "Show"}
               </button>
             </div>
+            {errors.password && <div style={styles.error}>{errors.password}</div>}
+          </div>
+
+          <div style={styles.field}>
+            <label style={styles.label}>Confirm password</label>
+            <div style={styles.inputWrap}>
+              <input
+                type={showConfirm ? "text" : "password"}
+                value={confirm}
+                onChange={(e) => setConfirm(e.target.value)}
+                onBlur={() => setTouched((t) => ({ ...t, confirm: true }))}
+                style={styles.inputInner}
+                placeholder="Repeat password"
+                autoComplete="new-password"
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirm((v) => !v)}
+                style={styles.eyeBtn}
+              >
+                {showConfirm ? "Hide" : "Show"}
+              </button>
+            </div>
             {showPasswordError && <div style={styles.error}>{errors.password}</div>}
           </div>
 
-          <div style={styles.rowBetween}>
-            <label style={styles.checkRow}>
-              <input type="checkbox" />
-              <span style={{ marginLeft: 8 }}>Remember me</span>
-            </label>
-            <button type="button" style={styles.linkBtn}>Forgot password?</button>
-          </div>
-
           <button type="button" disabled={!canSubmit} style={{ ...styles.primaryBtn, ...(canSubmit ? {} : styles.btnDisabled) }}>
-            Log in
+            Create account
           </button>
 
           <div style={styles.dividerRow}>
@@ -105,9 +147,13 @@ export default function Login() {
           </button>
 
           <div style={styles.footer}>
-            New here? <Link to="/signup">Create an account</Link>
+            Already have an account? <Link to="/login">Log in</Link>
           </div>
         </form>
+
+        <div style={styles.legal}>
+          By creating an account, you agree to the Terms and Privacy Policy.
+        </div>
       </div>
     </div>
   );
@@ -180,17 +226,6 @@ const styles: Record<string, React.CSSProperties> = {
     color: "#4F46E5",
     fontWeight: 600,
   },
-  rowBetween: { display: "flex", alignItems: "center", justifyContent: "space-between" },
-  checkRow: { display: "flex", alignItems: "center", fontSize: 13, color: "#374151" },
-  linkBtn: {
-    border: "none",
-    background: "transparent",
-    color: "#4F46E5",
-    fontSize: 13,
-    cursor: "pointer",
-    fontWeight: 600,
-    padding: 0,
-  },
   error: { fontSize: 12, color: "#B00020" },
   primaryBtn: {
     marginTop: 4,
@@ -225,4 +260,5 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: 14,
   },
   footer: { marginTop: 6, fontSize: 14, color: "#374151" },
+  legal: { marginTop: 14, fontSize: 12, color: "#9CA3AF", lineHeight: 1.5 },
 };
