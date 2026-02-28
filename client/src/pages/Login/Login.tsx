@@ -120,7 +120,7 @@ const styles: Record<string, React.CSSProperties> = {
     placeItems: "center",
     padding: 20,
     background:
-      "radial-gradient(1200px 600px at 10% 10%, #EEF2FF 0%, transparent 50%), radial-gradient(900px 500px at 90% 20%, #E0F2FE 0%, transparent 55%), #FAFAFA",
+    "radial-gradient(1200px 600px at 10% 10%,rgb(167, 178, 210) 0%, transparent 50%), radial-gradient(900px 500px at 90% 20%,rgb(208, 226, 237) 0%, transparent 55%),rgb(209, 218, 234)",
   },
   card: {
     width: "100%",
