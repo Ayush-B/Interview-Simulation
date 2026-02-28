@@ -20,12 +20,4 @@ app.use("/api/questions", questionRoutes);
 app.use("/api/attempts", attemptRoutes);
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(openapi));
 
-const { requireAuth } = require("./middleware/auth");
-
-app.get("/protected", requireAuth, (req, res) => {
-  res.json({ ok: true, userId: req.userId });
-});
-
-console.log("Mounted /api/auth routes");
-
 module.exports = app;
