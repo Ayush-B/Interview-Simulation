@@ -1,16 +1,74 @@
-import { http } from "./https";
+const BASE_URL = "http://localhost:4000/api";
 
-type AuthResponse = {
+export interface AuthResponse {
   token: string;
-  user?: { id: string; name?: string; email: string };
-};
+  user: { id: string; email: string };
+}
 
-export async function signup(payload: { name: string; email: string; password: string }) {
-  const { data } = await http.post<AuthResponse>("/api/auth/signup", payload);
+export interface AuthError {
+  error: string;
+}
+
+function saveSession(token: string, user: AuthResponse["user"]) {
+  localStorage.setItem("token", token);
+  localStorage.setItem("user", JSON.stringify(user));
+}
+
+export function getToken(): string | null {
+  return localStorage.getItem("token");
+}
+
+export function getUser(): AuthResponse["user"] | null {
+  const raw = localStorage.getItem("user");
+  return raw ? JSON.parse(raw) : null;
+}
+
+export function logout() {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+}
+
+export function isLoggedIn(): boolean {
+  return !!getToken();
+}
+
+// ── API calls ──────────────────────────────────────────
+export async function signup(
+  email: string,
+  password: string
+): Promise<AuthResponse> {
+  const res = await fetch(`${BASE_URL}/auth/signup`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error((data as AuthError).error || "Signup failed");
+  }
+
+  saveSession(data.token, data.user);
   return data;
 }
 
-export async function login(payload: { email: string; password: string }) {
-  const { data } = await http.post<AuthResponse>("/api/auth/login", payload);
+export async function login(
+  email: string,
+  password: string
+): Promise<AuthResponse> {
+  const res = await fetch(`${BASE_URL}/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error((data as AuthError).error || "Login failed");
+  }
+
+  saveSession(data.token, data.user);
   return data;
 }
