@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { getUser, getToken, logout } from "../../../services/auth";
 
 // ─── DATA ────────────────────────────────────────────────────────────────────
 
@@ -757,19 +758,43 @@ const css = `
 export default function Home() {
   const navigate = useNavigate();
 
-  const [setupDone,        setSetupDone]        = useState(false);
+  // ── 1. Guard: redirect to login if not authenticated ──────────────────────
+  const currentUser = getUser(); // { id, email } | null — read from localStorage
+
+  useEffect(() => {
+    if (!getToken()) navigate("/login");
+  }, []);
+
+  // ── 2. Setup state — persisted per user in localStorage ───────────────────
+  // Scoped by user id so different accounts don't share the same setup
+  const storageKey = currentUser ? `setup_${currentUser.id}` : "setup";
+
+  const savedSetup = (() => {
+    try { return JSON.parse(localStorage.getItem(storageKey)) || {}; }
+    catch { return {}; }
+  })();
+
+  const [setupDone,        setSetupDone]        = useState(!!savedSetup.role && !!savedSetup.practice);
   const [step,             setStep]             = useState(1);
-  const [selectedRole,     setSelectedRole]     = useState(null);
-  const [selectedPractice, setSelectedPractice] = useState(null);
+  const [selectedRole,     setSelectedRole]     = useState(savedSetup.role     || null);
+  const [selectedPractice, setSelectedPractice] = useState(savedSetup.practice || null);
 
   const [showModal,    setShowModal]    = useState(false);
   const [modalStep,    setModalStep]    = useState(1);
   const [tempRole,     setTempRole]     = useState(null);
   const [tempPractice, setTempPractice] = useState(null);
 
+  // Save role + practice to localStorage whenever they change
+  function saveSetup(role, practice) {
+    localStorage.setItem(storageKey, JSON.stringify({ role, practice }));
+  }
+
   function handleContinue() {
-    if (step === 1 && selectedRole)     { setStep(2); return; }
-    if (step === 2 && selectedPractice) { setSetupDone(true); return; }
+    if (step === 1 && selectedRole) { setStep(2); return; }
+    if (step === 2 && selectedPractice) {
+      saveSetup(selectedRole, selectedPractice);
+      setSetupDone(true);
+    }
   }
 
   function openModal() {
@@ -780,10 +805,33 @@ export default function Home() {
   }
 
   function saveModal() {
-    if (tempRole)     setSelectedRole(tempRole);
-    if (tempPractice) setSelectedPractice(tempPractice);
+    const newRole     = tempRole     || selectedRole;
+    const newPractice = tempPractice || selectedPractice;
+    setSelectedRole(newRole);
+    setSelectedPractice(newPractice);
+    saveSetup(newRole, newPractice);
     setShowModal(false);
   }
+
+  // ── 3. Logout ─────────────────────────────────────────────────────────────
+  function handleLogout() {
+    logout();          // clears token + user from localStorage (from services/auth)
+    navigate("/login");
+  }
+
+  // ── 4. Derive display name & initials from email ──────────────────────────
+  // e.g. "john.doe@gmail.com" → initials "JD", firstName "John"
+  const userEmail = currentUser?.email || "";
+  const userInitials = userEmail
+    .split("@")[0]               // part before @
+    .split(/[.\-_]/)             // split on separators
+    .map(p => p[0]?.toUpperCase() || "")
+    .slice(0, 2)
+    .join("") || "?";
+  const userFirstName = userEmail
+    .split("@")[0]
+    .split(/[.\-_]/)[0]
+    .replace(/^\w/, c => c.toUpperCase());
 
   const role   = ROLES.find(r => r.id === selectedRole);
   const packs  = ROLE_PACKS[selectedRole] || ROLE_PACKS.other;
@@ -825,7 +873,7 @@ export default function Home() {
                 <div className="setup-badge-icon" />
                 <div>
                   <div className="setup-badge-title">Interview Simulation</div>
-                  <div className="setup-badge-sub">One-time setup · takes 30 seconds</div>
+                  <div className="setup-badge-sub">Signed in as {userEmail}</div>
                 </div>
               </div>
 
@@ -904,7 +952,14 @@ export default function Home() {
           <button className="nav-link">History</button>
           <button className="nav-link">Insights</button>
           <button className="nav-link">Profile</button>
-          <div className="nav-avatar">JD</div>
+          {/* Logout */}
+          <button className="nav-link" onClick={handleLogout} style={{ color: "#EF4444" }}>
+            Logout
+          </button>
+          {/* Avatar — shows initials derived from email */}
+          <div className="nav-avatar" title={userEmail}>
+            {userInitials}
+          </div>
         </div>
       </nav>
 
@@ -918,7 +973,7 @@ export default function Home() {
 
           <div className="hero-content">
             <div className="hero-badge">
-              <div className="hero-badge-dot" /> Personalised for you
+              <div className="hero-badge-dot" /> Hey {userFirstName}, ready to practice?
             </div>
             <div className="hero-title">Practice for {role?.label}<br />Interviews</div>
             <div className="hero-sub">{practiceSubtitle}</div>
