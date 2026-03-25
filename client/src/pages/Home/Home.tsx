@@ -851,7 +851,7 @@ export default function Home() {
           {/* Left panel */}
           <div className="setup-left">
             <div className="setup-blob" style={{ top:-80, left:-80, width:360, height:360 }} />
-            <div className="setup-left-logo">
+            <div className="setup-logo">
               <div className="setup-logo-icon">⚡</div>
               <div>
                 <div className="setup-logo-name">InterviewAI</div>
@@ -978,7 +978,7 @@ export default function Home() {
             <div className="hero-title">Practice for {role?.label}<br />Interviews</div>
             <div className="hero-sub">{practiceSubtitle}</div>
             <div className="hero-actions">
-              <button className="btn-hero-primary">▶ Start Interview</button>
+              <button className="btn-hero-primary" onClick={() => navigate(`/practice?role=${selectedRole}&type=${selectedPractice}`)}>▶ Start Interview</button>
               <button className="btn-hero-ghost" onClick={openModal}>Change Role</button>
             </div>
           </div>
@@ -998,7 +998,7 @@ export default function Home() {
               <div className="qc-illustration"><TechIllustration /></div>
               <div className="qc-name">Technical Practice</div>
               <div className="qc-desc">Domain-specific concepts, tools & problem solving for {role?.label}</div>
-              <button className="btn-start">Start →</button>
+              <button className="btn-start" onClick={() => navigate(`/practice?role=${selectedRole}&type=technical`)}>Start →</button>
             </div>
           )}
           {(selectedPractice === "behavioral" || selectedPractice === "both") && (
@@ -1006,7 +1006,7 @@ export default function Home() {
               <div className="qc-illustration"><BehavioralIllustration /></div>
               <div className="qc-name">Behavioral Practice</div>
               <div className="qc-desc">HR / experience / STAR format questions</div>
-              <button className="btn-start">Start →</button>
+              <button className="btn-start" onClick={() => navigate(`/practice?role=${selectedRole}&type=behavioral`)}>Start →</button>
             </div>
           )}
           {selectedPractice === "both" && (
@@ -1014,7 +1014,7 @@ export default function Home() {
               <div className="qc-illustration"><MixedIllustration /></div>
               <div className="qc-name">Mixed Interview</div>
               <div className="qc-desc">Full session — technical + behavioral combined</div>
-              <button className="btn-start">Start →</button>
+              <button className="btn-start" onClick={() => navigate(`/practice?role=${selectedRole}&type=both`)}>Start →</button>
             </div>
           )}
         </div>

@@ -28,8 +28,23 @@ export function logout() {
   localStorage.removeItem("user");
 }
 
+function isTokenExpired(token: string): boolean {
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return payload.exp * 1000 < Date.now();
+  } catch {
+    return true;
+  }
+}
+
 export function isLoggedIn(): boolean {
-  return !!getToken();
+  const token = getToken();
+  if (!token) return false;
+  if (isTokenExpired(token)) {
+    logout(); // clear the stale token immediately
+    return false;
+  }
+  return true;
 }
 
 // ── API calls ──────────────────────────────────────────
