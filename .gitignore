@@ -3,18 +3,37 @@
 .env.*
 !.env.example
 
-# Node
+# Dependencies
 node_modules/
 **/node_modules/
 
+# Build output
+dist/
+**/dist/
+dist-ssr/
+**/dist-ssr/
+
+# Vite
+.vite/
+**/.vite/
+
 # Logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+
+# Editor
+.vscode/
+!.vscode/extensions.json
+.idea/
 
 # OS files
 .DS_Store
 Thumbs.db
 
-# Docker
+# Local Docker data
 mongo_data/
+postgres_data/
+redis_data/
