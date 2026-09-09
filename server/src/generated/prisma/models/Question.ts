@@ -26,9 +26,11 @@ export type AggregateQuestion = {
 
 export type QuestionMinAggregateOutputType = {
   id: string | null
+  role: string | null
+  type: string | null
   prompt: string | null
-  category: string | null
-  difficulty: string | null
+  correctAnswer: string | null
+  explanation: string | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -36,9 +38,11 @@ export type QuestionMinAggregateOutputType = {
 
 export type QuestionMaxAggregateOutputType = {
   id: string | null
+  role: string | null
+  type: string | null
   prompt: string | null
-  category: string | null
-  difficulty: string | null
+  correctAnswer: string | null
+  explanation: string | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -46,9 +50,11 @@ export type QuestionMaxAggregateOutputType = {
 
 export type QuestionCountAggregateOutputType = {
   id: number
+  role: number
+  type: number
   prompt: number
-  category: number
-  difficulty: number
+  correctAnswer: number
+  explanation: number
   isActive: number
   createdAt: number
   updatedAt: number
@@ -58,9 +64,11 @@ export type QuestionCountAggregateOutputType = {
 
 export type QuestionMinAggregateInputType = {
   id?: true
+  role?: true
+  type?: true
   prompt?: true
-  category?: true
-  difficulty?: true
+  correctAnswer?: true
+  explanation?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -68,9 +76,11 @@ export type QuestionMinAggregateInputType = {
 
 export type QuestionMaxAggregateInputType = {
   id?: true
+  role?: true
+  type?: true
   prompt?: true
-  category?: true
-  difficulty?: true
+  correctAnswer?: true
+  explanation?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -78,9 +88,11 @@ export type QuestionMaxAggregateInputType = {
 
 export type QuestionCountAggregateInputType = {
   id?: true
+  role?: true
+  type?: true
   prompt?: true
-  category?: true
-  difficulty?: true
+  correctAnswer?: true
+  explanation?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -161,9 +173,11 @@ export type QuestionGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 
 export type QuestionGroupByOutputType = {
   id: string
+  role: string
+  type: string
   prompt: string
-  category: string | null
-  difficulty: string | null
+  correctAnswer: string | null
+  explanation: string | null
   isActive: boolean
   createdAt: Date
   updatedAt: Date
@@ -192,9 +206,11 @@ export type QuestionWhereInput = {
   OR?: Prisma.QuestionWhereInput[]
   NOT?: Prisma.QuestionWhereInput | Prisma.QuestionWhereInput[]
   id?: Prisma.UuidFilter<"Question"> | string
+  role?: Prisma.StringFilter<"Question"> | string
+  type?: Prisma.StringFilter<"Question"> | string
   prompt?: Prisma.StringFilter<"Question"> | string
-  category?: Prisma.StringNullableFilter<"Question"> | string | null
-  difficulty?: Prisma.StringNullableFilter<"Question"> | string | null
+  correctAnswer?: Prisma.StringNullableFilter<"Question"> | string | null
+  explanation?: Prisma.StringNullableFilter<"Question"> | string | null
   isActive?: Prisma.BoolFilter<"Question"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Question"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Question"> | Date | string
@@ -203,9 +219,11 @@ export type QuestionWhereInput = {
 
 export type QuestionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
-  category?: Prisma.SortOrderInput | Prisma.SortOrder
-  difficulty?: Prisma.SortOrderInput | Prisma.SortOrder
+  correctAnswer?: Prisma.SortOrderInput | Prisma.SortOrder
+  explanation?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -217,9 +235,11 @@ export type QuestionWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.QuestionWhereInput | Prisma.QuestionWhereInput[]
   OR?: Prisma.QuestionWhereInput[]
   NOT?: Prisma.QuestionWhereInput | Prisma.QuestionWhereInput[]
+  role?: Prisma.StringFilter<"Question"> | string
+  type?: Prisma.StringFilter<"Question"> | string
   prompt?: Prisma.StringFilter<"Question"> | string
-  category?: Prisma.StringNullableFilter<"Question"> | string | null
-  difficulty?: Prisma.StringNullableFilter<"Question"> | string | null
+  correctAnswer?: Prisma.StringNullableFilter<"Question"> | string | null
+  explanation?: Prisma.StringNullableFilter<"Question"> | string | null
   isActive?: Prisma.BoolFilter<"Question"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Question"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Question"> | Date | string
@@ -228,9 +248,11 @@ export type QuestionWhereUniqueInput = Prisma.AtLeast<{
 
 export type QuestionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
-  category?: Prisma.SortOrderInput | Prisma.SortOrder
-  difficulty?: Prisma.SortOrderInput | Prisma.SortOrder
+  correctAnswer?: Prisma.SortOrderInput | Prisma.SortOrder
+  explanation?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -244,9 +266,11 @@ export type QuestionScalarWhereWithAggregatesInput = {
   OR?: Prisma.QuestionScalarWhereWithAggregatesInput[]
   NOT?: Prisma.QuestionScalarWhereWithAggregatesInput | Prisma.QuestionScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"Question"> | string
+  role?: Prisma.StringWithAggregatesFilter<"Question"> | string
+  type?: Prisma.StringWithAggregatesFilter<"Question"> | string
   prompt?: Prisma.StringWithAggregatesFilter<"Question"> | string
-  category?: Prisma.StringNullableWithAggregatesFilter<"Question"> | string | null
-  difficulty?: Prisma.StringNullableWithAggregatesFilter<"Question"> | string | null
+  correctAnswer?: Prisma.StringNullableWithAggregatesFilter<"Question"> | string | null
+  explanation?: Prisma.StringNullableWithAggregatesFilter<"Question"> | string | null
   isActive?: Prisma.BoolWithAggregatesFilter<"Question"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Question"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Question"> | Date | string
@@ -254,9 +278,11 @@ export type QuestionScalarWhereWithAggregatesInput = {
 
 export type QuestionCreateInput = {
   id?: string
+  role: string
+  type: string
   prompt: string
-  category?: string | null
-  difficulty?: string | null
+  correctAnswer?: string | null
+  explanation?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -265,9 +291,11 @@ export type QuestionCreateInput = {
 
 export type QuestionUncheckedCreateInput = {
   id?: string
+  role: string
+  type: string
   prompt: string
-  category?: string | null
-  difficulty?: string | null
+  correctAnswer?: string | null
+  explanation?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -276,9 +304,11 @@ export type QuestionUncheckedCreateInput = {
 
 export type QuestionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correctAnswer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -287,9 +317,11 @@ export type QuestionUpdateInput = {
 
 export type QuestionUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correctAnswer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -298,9 +330,11 @@ export type QuestionUncheckedUpdateInput = {
 
 export type QuestionCreateManyInput = {
   id?: string
+  role: string
+  type: string
   prompt: string
-  category?: string | null
-  difficulty?: string | null
+  correctAnswer?: string | null
+  explanation?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -308,9 +342,11 @@ export type QuestionCreateManyInput = {
 
 export type QuestionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correctAnswer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -318,9 +354,11 @@ export type QuestionUpdateManyMutationInput = {
 
 export type QuestionUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correctAnswer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -328,9 +366,11 @@ export type QuestionUncheckedUpdateManyInput = {
 
 export type QuestionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
-  category?: Prisma.SortOrder
-  difficulty?: Prisma.SortOrder
+  correctAnswer?: Prisma.SortOrder
+  explanation?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -338,9 +378,11 @@ export type QuestionCountOrderByAggregateInput = {
 
 export type QuestionMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
-  category?: Prisma.SortOrder
-  difficulty?: Prisma.SortOrder
+  correctAnswer?: Prisma.SortOrder
+  explanation?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -348,9 +390,11 @@ export type QuestionMaxOrderByAggregateInput = {
 
 export type QuestionMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
-  category?: Prisma.SortOrder
-  difficulty?: Prisma.SortOrder
+  correctAnswer?: Prisma.SortOrder
+  explanation?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -381,9 +425,11 @@ export type QuestionUpdateOneRequiredWithoutInterviewsNestedInput = {
 
 export type QuestionCreateWithoutInterviewsInput = {
   id?: string
+  role: string
+  type: string
   prompt: string
-  category?: string | null
-  difficulty?: string | null
+  correctAnswer?: string | null
+  explanation?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -391,9 +437,11 @@ export type QuestionCreateWithoutInterviewsInput = {
 
 export type QuestionUncheckedCreateWithoutInterviewsInput = {
   id?: string
+  role: string
+  type: string
   prompt: string
-  category?: string | null
-  difficulty?: string | null
+  correctAnswer?: string | null
+  explanation?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -417,9 +465,11 @@ export type QuestionUpdateToOneWithWhereWithoutInterviewsInput = {
 
 export type QuestionUpdateWithoutInterviewsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correctAnswer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -427,9 +477,11 @@ export type QuestionUpdateWithoutInterviewsInput = {
 
 export type QuestionUncheckedUpdateWithoutInterviewsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  difficulty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correctAnswer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -468,9 +520,11 @@ export type QuestionCountOutputTypeCountInterviewsArgs<ExtArgs extends runtime.T
 
 export type QuestionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  role?: boolean
+  type?: boolean
   prompt?: boolean
-  category?: boolean
-  difficulty?: boolean
+  correctAnswer?: boolean
+  explanation?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -480,9 +534,11 @@ export type QuestionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
 
 export type QuestionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  role?: boolean
+  type?: boolean
   prompt?: boolean
-  category?: boolean
-  difficulty?: boolean
+  correctAnswer?: boolean
+  explanation?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -490,9 +546,11 @@ export type QuestionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
 
 export type QuestionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  role?: boolean
+  type?: boolean
   prompt?: boolean
-  category?: boolean
-  difficulty?: boolean
+  correctAnswer?: boolean
+  explanation?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -500,15 +558,17 @@ export type QuestionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 
 export type QuestionSelectScalar = {
   id?: boolean
+  role?: boolean
+  type?: boolean
   prompt?: boolean
-  category?: boolean
-  difficulty?: boolean
+  correctAnswer?: boolean
+  explanation?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type QuestionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "prompt" | "category" | "difficulty" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["question"]>
+export type QuestionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "role" | "type" | "prompt" | "correctAnswer" | "explanation" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["question"]>
 export type QuestionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   interviews?: boolean | Prisma.Question$interviewsArgs<ExtArgs>
   _count?: boolean | Prisma.QuestionCountOutputTypeDefaultArgs<ExtArgs>
@@ -523,9 +583,11 @@ export type $QuestionPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    role: string
+    type: string
     prompt: string
-    category: string | null
-    difficulty: string | null
+    correctAnswer: string | null
+    explanation: string | null
     isActive: boolean
     createdAt: Date
     updatedAt: Date
@@ -954,9 +1016,11 @@ export interface Prisma__QuestionClient<T, Null = never, ExtArgs extends runtime
  */
 export interface QuestionFieldRefs {
   readonly id: Prisma.FieldRef<"Question", 'String'>
+  readonly role: Prisma.FieldRef<"Question", 'String'>
+  readonly type: Prisma.FieldRef<"Question", 'String'>
   readonly prompt: Prisma.FieldRef<"Question", 'String'>
-  readonly category: Prisma.FieldRef<"Question", 'String'>
-  readonly difficulty: Prisma.FieldRef<"Question", 'String'>
+  readonly correctAnswer: Prisma.FieldRef<"Question", 'String'>
+  readonly explanation: Prisma.FieldRef<"Question", 'String'>
   readonly isActive: Prisma.FieldRef<"Question", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Question", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Question", 'DateTime'>

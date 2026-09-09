@@ -2,9 +2,9 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 import authRoutes from "./routes/authRoutes";
+import questionRoutes from "./routes/questionRoutes";
+import attemptRoutes from "./routes/attemptRoutes";
 
-const questionRoutes = require("./routes/questionRoutes");
-const attemptRoutes = require("./routes/attemptRoutes");
 const openapi = require("./docs/openapi");
 
 const app = express();

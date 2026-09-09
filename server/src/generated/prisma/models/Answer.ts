@@ -27,21 +27,30 @@ export type AggregateAnswer = {
 export type AnswerMinAggregateOutputType = {
   id: string | null
   interviewQuestionId: string | null
+  questionSnapshot: string | null
   response: string | null
+  isCorrect: boolean | null
+  correctAnswer: string | null
   submittedAt: Date | null
 }
 
 export type AnswerMaxAggregateOutputType = {
   id: string | null
   interviewQuestionId: string | null
+  questionSnapshot: string | null
   response: string | null
+  isCorrect: boolean | null
+  correctAnswer: string | null
   submittedAt: Date | null
 }
 
 export type AnswerCountAggregateOutputType = {
   id: number
   interviewQuestionId: number
+  questionSnapshot: number
   response: number
+  isCorrect: number
+  correctAnswer: number
   submittedAt: number
   _all: number
 }
@@ -50,21 +59,30 @@ export type AnswerCountAggregateOutputType = {
 export type AnswerMinAggregateInputType = {
   id?: true
   interviewQuestionId?: true
+  questionSnapshot?: true
   response?: true
+  isCorrect?: true
+  correctAnswer?: true
   submittedAt?: true
 }
 
 export type AnswerMaxAggregateInputType = {
   id?: true
   interviewQuestionId?: true
+  questionSnapshot?: true
   response?: true
+  isCorrect?: true
+  correctAnswer?: true
   submittedAt?: true
 }
 
 export type AnswerCountAggregateInputType = {
   id?: true
   interviewQuestionId?: true
+  questionSnapshot?: true
   response?: true
+  isCorrect?: true
+  correctAnswer?: true
   submittedAt?: true
   _all?: true
 }
@@ -144,7 +162,10 @@ export type AnswerGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 export type AnswerGroupByOutputType = {
   id: string
   interviewQuestionId: string
+  questionSnapshot: string
   response: string
+  isCorrect: boolean
+  correctAnswer: string | null
   submittedAt: Date
   _count: AnswerCountAggregateOutputType | null
   _min: AnswerMinAggregateOutputType | null
@@ -172,7 +193,10 @@ export type AnswerWhereInput = {
   NOT?: Prisma.AnswerWhereInput | Prisma.AnswerWhereInput[]
   id?: Prisma.UuidFilter<"Answer"> | string
   interviewQuestionId?: Prisma.UuidFilter<"Answer"> | string
+  questionSnapshot?: Prisma.StringFilter<"Answer"> | string
   response?: Prisma.StringFilter<"Answer"> | string
+  isCorrect?: Prisma.BoolFilter<"Answer"> | boolean
+  correctAnswer?: Prisma.StringNullableFilter<"Answer"> | string | null
   submittedAt?: Prisma.DateTimeFilter<"Answer"> | Date | string
   interviewQuestion?: Prisma.XOR<Prisma.InterviewQuestionScalarRelationFilter, Prisma.InterviewQuestionWhereInput>
 }
@@ -180,7 +204,10 @@ export type AnswerWhereInput = {
 export type AnswerOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   interviewQuestionId?: Prisma.SortOrder
+  questionSnapshot?: Prisma.SortOrder
   response?: Prisma.SortOrder
+  isCorrect?: Prisma.SortOrder
+  correctAnswer?: Prisma.SortOrderInput | Prisma.SortOrder
   submittedAt?: Prisma.SortOrder
   interviewQuestion?: Prisma.InterviewQuestionOrderByWithRelationInput
 }
@@ -191,7 +218,10 @@ export type AnswerWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.AnswerWhereInput | Prisma.AnswerWhereInput[]
   OR?: Prisma.AnswerWhereInput[]
   NOT?: Prisma.AnswerWhereInput | Prisma.AnswerWhereInput[]
+  questionSnapshot?: Prisma.StringFilter<"Answer"> | string
   response?: Prisma.StringFilter<"Answer"> | string
+  isCorrect?: Prisma.BoolFilter<"Answer"> | boolean
+  correctAnswer?: Prisma.StringNullableFilter<"Answer"> | string | null
   submittedAt?: Prisma.DateTimeFilter<"Answer"> | Date | string
   interviewQuestion?: Prisma.XOR<Prisma.InterviewQuestionScalarRelationFilter, Prisma.InterviewQuestionWhereInput>
 }, "id" | "interviewQuestionId">
@@ -199,7 +229,10 @@ export type AnswerWhereUniqueInput = Prisma.AtLeast<{
 export type AnswerOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   interviewQuestionId?: Prisma.SortOrder
+  questionSnapshot?: Prisma.SortOrder
   response?: Prisma.SortOrder
+  isCorrect?: Prisma.SortOrder
+  correctAnswer?: Prisma.SortOrderInput | Prisma.SortOrder
   submittedAt?: Prisma.SortOrder
   _count?: Prisma.AnswerCountOrderByAggregateInput
   _max?: Prisma.AnswerMaxOrderByAggregateInput
@@ -212,13 +245,19 @@ export type AnswerScalarWhereWithAggregatesInput = {
   NOT?: Prisma.AnswerScalarWhereWithAggregatesInput | Prisma.AnswerScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"Answer"> | string
   interviewQuestionId?: Prisma.UuidWithAggregatesFilter<"Answer"> | string
+  questionSnapshot?: Prisma.StringWithAggregatesFilter<"Answer"> | string
   response?: Prisma.StringWithAggregatesFilter<"Answer"> | string
+  isCorrect?: Prisma.BoolWithAggregatesFilter<"Answer"> | boolean
+  correctAnswer?: Prisma.StringNullableWithAggregatesFilter<"Answer"> | string | null
   submittedAt?: Prisma.DateTimeWithAggregatesFilter<"Answer"> | Date | string
 }
 
 export type AnswerCreateInput = {
   id?: string
+  questionSnapshot: string
   response: string
+  isCorrect: boolean
+  correctAnswer?: string | null
   submittedAt?: Date | string
   interviewQuestion: Prisma.InterviewQuestionCreateNestedOneWithoutAnswerInput
 }
@@ -226,13 +265,19 @@ export type AnswerCreateInput = {
 export type AnswerUncheckedCreateInput = {
   id?: string
   interviewQuestionId: string
+  questionSnapshot: string
   response: string
+  isCorrect: boolean
+  correctAnswer?: string | null
   submittedAt?: Date | string
 }
 
 export type AnswerUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  questionSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   response?: Prisma.StringFieldUpdateOperationsInput | string
+  isCorrect?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  correctAnswer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submittedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   interviewQuestion?: Prisma.InterviewQuestionUpdateOneRequiredWithoutAnswerNestedInput
 }
@@ -240,27 +285,39 @@ export type AnswerUpdateInput = {
 export type AnswerUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   interviewQuestionId?: Prisma.StringFieldUpdateOperationsInput | string
+  questionSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   response?: Prisma.StringFieldUpdateOperationsInput | string
+  isCorrect?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  correctAnswer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submittedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type AnswerCreateManyInput = {
   id?: string
   interviewQuestionId: string
+  questionSnapshot: string
   response: string
+  isCorrect: boolean
+  correctAnswer?: string | null
   submittedAt?: Date | string
 }
 
 export type AnswerUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  questionSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   response?: Prisma.StringFieldUpdateOperationsInput | string
+  isCorrect?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  correctAnswer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submittedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type AnswerUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   interviewQuestionId?: Prisma.StringFieldUpdateOperationsInput | string
+  questionSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   response?: Prisma.StringFieldUpdateOperationsInput | string
+  isCorrect?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  correctAnswer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submittedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -272,21 +329,30 @@ export type AnswerNullableScalarRelationFilter = {
 export type AnswerCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   interviewQuestionId?: Prisma.SortOrder
+  questionSnapshot?: Prisma.SortOrder
   response?: Prisma.SortOrder
+  isCorrect?: Prisma.SortOrder
+  correctAnswer?: Prisma.SortOrder
   submittedAt?: Prisma.SortOrder
 }
 
 export type AnswerMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   interviewQuestionId?: Prisma.SortOrder
+  questionSnapshot?: Prisma.SortOrder
   response?: Prisma.SortOrder
+  isCorrect?: Prisma.SortOrder
+  correctAnswer?: Prisma.SortOrder
   submittedAt?: Prisma.SortOrder
 }
 
 export type AnswerMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   interviewQuestionId?: Prisma.SortOrder
+  questionSnapshot?: Prisma.SortOrder
   response?: Prisma.SortOrder
+  isCorrect?: Prisma.SortOrder
+  correctAnswer?: Prisma.SortOrder
   submittedAt?: Prisma.SortOrder
 }
 
@@ -324,13 +390,19 @@ export type AnswerUncheckedUpdateOneWithoutInterviewQuestionNestedInput = {
 
 export type AnswerCreateWithoutInterviewQuestionInput = {
   id?: string
+  questionSnapshot: string
   response: string
+  isCorrect: boolean
+  correctAnswer?: string | null
   submittedAt?: Date | string
 }
 
 export type AnswerUncheckedCreateWithoutInterviewQuestionInput = {
   id?: string
+  questionSnapshot: string
   response: string
+  isCorrect: boolean
+  correctAnswer?: string | null
   submittedAt?: Date | string
 }
 
@@ -352,13 +424,19 @@ export type AnswerUpdateToOneWithWhereWithoutInterviewQuestionInput = {
 
 export type AnswerUpdateWithoutInterviewQuestionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  questionSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   response?: Prisma.StringFieldUpdateOperationsInput | string
+  isCorrect?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  correctAnswer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submittedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type AnswerUncheckedUpdateWithoutInterviewQuestionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  questionSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   response?: Prisma.StringFieldUpdateOperationsInput | string
+  isCorrect?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  correctAnswer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submittedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -367,7 +445,10 @@ export type AnswerUncheckedUpdateWithoutInterviewQuestionInput = {
 export type AnswerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   interviewQuestionId?: boolean
+  questionSnapshot?: boolean
   response?: boolean
+  isCorrect?: boolean
+  correctAnswer?: boolean
   submittedAt?: boolean
   interviewQuestion?: boolean | Prisma.InterviewQuestionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["answer"]>
@@ -375,7 +456,10 @@ export type AnswerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 export type AnswerSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   interviewQuestionId?: boolean
+  questionSnapshot?: boolean
   response?: boolean
+  isCorrect?: boolean
+  correctAnswer?: boolean
   submittedAt?: boolean
   interviewQuestion?: boolean | Prisma.InterviewQuestionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["answer"]>
@@ -383,7 +467,10 @@ export type AnswerSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
 export type AnswerSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   interviewQuestionId?: boolean
+  questionSnapshot?: boolean
   response?: boolean
+  isCorrect?: boolean
+  correctAnswer?: boolean
   submittedAt?: boolean
   interviewQuestion?: boolean | Prisma.InterviewQuestionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["answer"]>
@@ -391,11 +478,14 @@ export type AnswerSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
 export type AnswerSelectScalar = {
   id?: boolean
   interviewQuestionId?: boolean
+  questionSnapshot?: boolean
   response?: boolean
+  isCorrect?: boolean
+  correctAnswer?: boolean
   submittedAt?: boolean
 }
 
-export type AnswerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "interviewQuestionId" | "response" | "submittedAt", ExtArgs["result"]["answer"]>
+export type AnswerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "interviewQuestionId" | "questionSnapshot" | "response" | "isCorrect" | "correctAnswer" | "submittedAt", ExtArgs["result"]["answer"]>
 export type AnswerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   interviewQuestion?: boolean | Prisma.InterviewQuestionDefaultArgs<ExtArgs>
 }
@@ -414,7 +504,10 @@ export type $AnswerPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     interviewQuestionId: string
+    questionSnapshot: string
     response: string
+    isCorrect: boolean
+    correctAnswer: string | null
     submittedAt: Date
   }, ExtArgs["result"]["answer"]>
   composites: {}
@@ -842,7 +935,10 @@ export interface Prisma__AnswerClient<T, Null = never, ExtArgs extends runtime.T
 export interface AnswerFieldRefs {
   readonly id: Prisma.FieldRef<"Answer", 'String'>
   readonly interviewQuestionId: Prisma.FieldRef<"Answer", 'String'>
+  readonly questionSnapshot: Prisma.FieldRef<"Answer", 'String'>
   readonly response: Prisma.FieldRef<"Answer", 'String'>
+  readonly isCorrect: Prisma.FieldRef<"Answer", 'Boolean'>
+  readonly correctAnswer: Prisma.FieldRef<"Answer", 'String'>
   readonly submittedAt: Prisma.FieldRef<"Answer", 'DateTime'>
 }
     

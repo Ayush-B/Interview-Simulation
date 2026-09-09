@@ -1,18 +1,4 @@
 services:
-  mongo:
-    image: mongo:7
-    container_name: interview-sim-mongo
-    restart: unless-stopped
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-    healthcheck:
-      test: ["CMD", "mongosh", "--quiet", "mongodb://localhost:27017/admin", "--eval", "db.runCommand({ ping: 1 }).ok"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-
   postgres:
     image: postgres:16-alpine
     container_name: interview-sim-postgres
@@ -38,13 +24,13 @@ services:
     container_name: interview-sim-server
     restart: unless-stopped
     depends_on:
-      mongo:
+      postgres:
         condition: service_healthy
     ports:
       - "4000:4000"
     environment:
       PORT: 4000
-      MONGODB_URI: mongodb://mongo:27017/interview_sim
+      DATABASE_URL: postgresql://interview_app:interview_dev@postgres:5432/interview_sim
       JWT_SECRET: ${JWT_SECRET}
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:4000/health"]
@@ -53,5 +39,4 @@ services:
       retries: 10
 
 volumes:
-  mongo_data:
   postgres_data:

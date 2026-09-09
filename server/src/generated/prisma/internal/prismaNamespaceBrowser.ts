@@ -103,9 +103,11 @@ export type InterviewScalarFieldEnum = (typeof InterviewScalarFieldEnum)[keyof t
 
 export const QuestionScalarFieldEnum = {
   id: 'id',
+  role: 'role',
+  type: 'type',
   prompt: 'prompt',
-  category: 'category',
-  difficulty: 'difficulty',
+  correctAnswer: 'correctAnswer',
+  explanation: 'explanation',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -128,7 +130,10 @@ export type InterviewQuestionScalarFieldEnum = (typeof InterviewQuestionScalarFi
 export const AnswerScalarFieldEnum = {
   id: 'id',
   interviewQuestionId: 'interviewQuestionId',
+  questionSnapshot: 'questionSnapshot',
   response: 'response',
+  isCorrect: 'isCorrect',
+  correctAnswer: 'correctAnswer',
   submittedAt: 'submittedAt'
 } as const
 

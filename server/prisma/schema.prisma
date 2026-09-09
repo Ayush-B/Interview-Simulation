@@ -51,18 +51,19 @@ model Interview {
 }
 
 model Question {
-  id         String   @id @default(uuid()) @db.Uuid
-  prompt     String   @db.Text
-  category   String?
-  difficulty String?
-  isActive   Boolean  @default(true)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id            String   @id @default(uuid()) @db.Uuid
+  role          String
+  type          String
+  prompt        String   @db.Text
+  correctAnswer String?  @db.Text
+  explanation   String?  @db.Text
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   interviews InterviewQuestion[]
 
-  @@index([category])
-  @@index([difficulty])
+  @@index([role, type, isActive])
 }
 
 model InterviewQuestion {
@@ -84,7 +85,10 @@ model InterviewQuestion {
 model Answer {
   id                  String   @id @default(uuid()) @db.Uuid
   interviewQuestionId String   @unique @db.Uuid
+  questionSnapshot    String   @db.Text
   response            String   @db.Text
+  isCorrect           Boolean
+  correctAnswer       String?  @db.Text
   submittedAt         DateTime @default(now())
 
   interviewQuestion InterviewQuestion @relation(fields: [interviewQuestionId], references: [id], onDelete: Cascade)
