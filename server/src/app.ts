@@ -4,6 +4,7 @@ import swaggerUi from "swagger-ui-express";
 import authRoutes from "./routes/authRoutes";
 import questionRoutes from "./routes/questionRoutes";
 import attemptRoutes from "./routes/attemptRoutes";
+import interviewRoutes from "./routes/interviewRoutes";
 
 const openapi = require("./docs/openapi");
 
@@ -23,6 +24,7 @@ app.get("/health", (_req: Request, res: Response) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/questions", questionRoutes);
 app.use("/api/attempts", attemptRoutes);
+app.use("/api/interviews", interviewRoutes);
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(openapi));
 

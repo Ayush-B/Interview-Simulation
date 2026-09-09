@@ -35,6 +35,7 @@ model Interview {
   id          String          @id @default(uuid()) @db.Uuid
   userId      String          @db.Uuid
   role        String
+  type        String
   difficulty  String?
   status      InterviewStatus @default(ACTIVE)
   startedAt   DateTime        @default(now())

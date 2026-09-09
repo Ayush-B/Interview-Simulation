@@ -45,6 +45,7 @@ export const submitAttempt: RequestHandler = async (req, res, next) => {
       data: {
         userId,
         role: question.role,
+	type: question.type,
         status: "COMPLETED",
         completedAt: new Date(),
 
