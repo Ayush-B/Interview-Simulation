@@ -4,7 +4,8 @@ import {
   createInterview,
   getInterview,
   getNextQuestion,
-  submitInterviewAnswer
+  submitInterviewAnswer,
+  getInterviewEvaluation
 } from "../controllers/interviewController";
 
 const router = Router();
@@ -16,6 +17,16 @@ router.post(
   "/:id/answers",
   requireAuth,
   submitInterviewAnswer
+);
+router.get(
+  "/:id/evaluation",
+  requireAuth,
+  getInterviewEvaluation
+);
+router.get(
+  "/:id/evaluation",
+  requireAuth,
+  getInterviewEvaluation
 );
 
 export default router;

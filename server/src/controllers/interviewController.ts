@@ -1,3 +1,4 @@
+import { enqueueEvaluation } from "../queues/evaluationQueue";
 import type { RequestHandler } from "express";
 import { prisma } from "../config/prisma";
 import type { AuthenticatedRequest } from "../middleware/auth";
@@ -352,9 +353,9 @@ export const submitInterviewAnswer: RequestHandler = async (req, res, next) => {
       return;
     }
 
-    if (interview.status === "COMPLETED") {
+    if (interview.status !== "ACTIVE") {
       res.status(409).json({
-        error: "interview is already completed"
+        error: `interview is ${interview.status.toLowerCase()}`
       });
       return;
     }
@@ -428,18 +429,30 @@ export const submitInterviewAnswer: RequestHandler = async (req, res, next) => {
           }
         });
 
-      const completed =
-        remainingQuestions === 0;
+      const readyForEvaluation = remainingQuestions === 0;
 
-      if (completed) {
+      if (readyForEvaluation) {
         await tx.interview.update({
           where: {
             id: interviewId
           },
-
           data: {
-            status: "COMPLETED",
-            completedAt: new Date()
+            status: "EVALUATING"
+          }
+        });
+
+        await tx.evaluation.upsert({
+          where: {
+            interviewId
+          },
+          create: {
+            interviewId,
+            status: "PENDING"
+          },
+          update: {
+            status: "PENDING",
+            errorMessage: null,
+            completedAt: null
           }
         });
       }
@@ -448,16 +461,56 @@ export const submitInterviewAnswer: RequestHandler = async (req, res, next) => {
         answer,
         remainingQuestions,
         totalQuestions,
-        completed
+        readyForEvaluation
       };
     });
+
+    let evaluationJobId: string | undefined;
+
+    if (result.readyForEvaluation) {
+      try {
+        const job = await enqueueEvaluation(
+          interviewId,
+          userId
+        );
+
+        evaluationJobId = job.id;
+      } catch (queueError) {
+        const message =
+          queueError instanceof Error
+            ? queueError.message
+            : "Failed to enqueue evaluation";
+
+        await prisma.$transaction([
+          prisma.evaluation.update({
+            where: {
+              interviewId
+            },
+            data: {
+              status: "FAILED",
+              errorMessage: message
+            }
+          }),
+
+          prisma.interview.update({
+            where: {
+              id: interviewId
+            },
+            data: {
+              status: "FAILED"
+            }
+          })
+        ]);
+
+        throw queueError;
+      }
+    }
 
     res.status(201).json({
       answerId: result.answer.id,
       interviewQuestionId: assignedQuestion.id,
       position: assignedQuestion.position,
       isCorrect,
-      correctAnswer: expectedAnswer || null,
 
       progress: {
         answered:
@@ -465,9 +518,78 @@ export const submitInterviewAnswer: RequestHandler = async (req, res, next) => {
         total: result.totalQuestions
       },
 
-      status: result.completed
-        ? "COMPLETED"
-        : "ACTIVE"
+      status: result.readyForEvaluation
+        ? "EVALUATING"
+        : "ACTIVE",
+
+      evaluationJobId
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getInterviewEvaluation: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = (req as AuthenticatedRequest).userId;
+    const rawInterviewId = req.params.id;
+
+    if (!userId) {
+      res.status(401).json({ error: "unauthorized" });
+      return;
+    }
+
+    if (!rawInterviewId || Array.isArray(rawInterviewId)) {
+      res.status(400).json({
+        error: "invalid interview id"
+      });
+      return;
+    }
+
+    const interviewId = rawInterviewId;
+
+    const interview = await prisma.interview.findFirst({
+      where: {
+        id: interviewId,
+        userId
+      },
+
+      select: {
+        id: true,
+        status: true,
+
+        evaluation: {
+          select: {
+            status: true,
+            score: true,
+            feedback: true,
+            errorMessage: true,
+            createdAt: true,
+            updatedAt: true,
+            completedAt: true
+          }
+        }
+      }
+    });
+
+    if (!interview) {
+      res.status(404).json({
+        error: "interview not found"
+      });
+      return;
+    }
+
+    if (!interview.evaluation) {
+      res.status(404).json({
+        error: "evaluation has not been created yet"
+      });
+      return;
+    }
+
+    res.json({
+      interviewId: interview.id,
+      interviewStatus: interview.status,
+      evaluation: interview.evaluation
     });
   } catch (error) {
     next(error);

@@ -7,7 +7,8 @@
     "dev": "tsx watch src/server.ts",
     "start": "node dist/server.js",
     "seed": "tsx src/seeds/seedQuestions.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "worker:dev": "tsx watch src/workers/evaluationWorker.ts"
   },
   "keywords": [],
   "author": "",
@@ -16,9 +17,11 @@
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
     "bcrypt": "^6.0.0",
+    "bullmq": "^6.3.4",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
+    "ioredis": "^6.0.0",
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.23.0",
     "swagger-ui-express": "^5.0.1"
