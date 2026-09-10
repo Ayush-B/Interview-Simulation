@@ -4,6 +4,10 @@ import IORedis from "ioredis";
 
 import { prisma } from "../config/prisma";
 import type { EvaluationJobData } from "../queues/evaluationQueue";
+import {
+  evaluateInterview,
+  markEvaluationFailed
+} from "../services/evaluationService";
 
 const redisUrl = process.env.REDIS_URL;
 
@@ -23,113 +27,10 @@ const worker = new Worker<EvaluationJobData>(
 
     console.log(`Evaluating interview ${interviewId}`);
 
-    const interview = await prisma.interview.findFirst({
-      where: {
-        id: interviewId,
-        userId
-      },
-
-      include: {
-        questions: {
-          include: {
-            answer: true
-          }
-        }
-      }
-    });
-
-    if (!interview) {
-      throw new Error("Interview not found");
-    }
-
-    if (interview.questions.length === 0) {
-      throw new Error("Interview contains no questions");
-    }
-
-    const unanswered = interview.questions.filter(
-      (item) => !item.answer
-    );
-
-    if (unanswered.length > 0) {
-      throw new Error(
-        `Interview still has ${unanswered.length} unanswered question(s)`
-      );
-    }
-
-    await prisma.evaluation.upsert({
-      where: {
-        interviewId
-      },
-
-      create: {
-        interviewId,
-        status: "PROCESSING"
-      },
-
-      update: {
-        status: "PROCESSING",
-        errorMessage: null
-      }
-    });
-
-    let correctAnswers = 0;
-
-    for (const item of interview.questions) {
-      if (item.answer?.isCorrect) {
-        correctAnswers++;
-      }
-    }
-
-    const totalQuestions = interview.questions.length;
-
-    const score = Number(
-      ((correctAnswers / totalQuestions) * 100).toFixed(2)
-    );
-
-    const feedback = {
-      correctAnswers,
-      totalQuestions,
-      summary:
-        score >= 80
-          ? "Strong performance"
-          : score >= 60
-            ? "Good performance with some areas to improve"
-            : "More practice is recommended"
-    };
-
-    await prisma.$transaction([
-      prisma.evaluation.update({
-        where: {
-          interviewId
-        },
-
-        data: {
-          status: "COMPLETED",
-          score,
-          feedback,
-          completedAt: new Date(),
-          errorMessage: null
-        }
-      }),
-
-      prisma.interview.update({
-        where: {
-          id: interviewId
-        },
-
-        data: {
-          status: "COMPLETED",
-          completedAt: new Date()
-        }
-      })
-    ]);
-
-    return {
+    return evaluateInterview(
       interviewId,
-      score,
-      correctAnswers,
-      totalQuestions
-    };
+      userId
+    );
   },
 
   {
@@ -144,11 +45,56 @@ worker.on("completed", (job, result) => {
   );
 });
 
-worker.on("failed", (job, error) => {
+
+worker.on("failed", async (job, error) => {
+  if (!job) {
+    console.error(
+      "Evaluation job failed without job information:",
+      error.message
+    );
+    return;
+  }
+
+  const maxAttempts = job.opts.attempts ?? 1;
+  const attemptsMade = job.attemptsMade;
+
   console.error(
-    `Evaluation job ${job?.id ?? "unknown"} failed:`,
+    `Evaluation job ${job.id ?? "unknown"} failed ` +
+      `(attempt ${attemptsMade}/${maxAttempts}):`,
     error.message
   );
+
+  /*
+   * BullMQ will retry the job automatically while attempts remain.
+   * Do NOT mark the interview FAILED yet.
+   */
+  if (attemptsMade < maxAttempts) {
+    console.log(
+      `Evaluation will be retried for interview ${job.data.interviewId}`
+    );
+    return;
+  }
+
+  /*
+   * All configured attempts have been exhausted.
+   * Now this is a permanent failure from our application's perspective.
+   */
+  try {
+    await markEvaluationFailed(
+      job.data.interviewId,
+      job.data.userId,
+      error.message
+    );
+
+    console.error(
+      `Evaluation permanently failed for interview ${job.data.interviewId}`
+    );
+  } catch (databaseError) {
+    console.error(
+      "Failed to persist evaluation failure:",
+      databaseError
+    );
+  }
 });
 
 console.log("Evaluation worker is running");
